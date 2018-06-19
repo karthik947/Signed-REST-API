@@ -1,0 +1,31 @@
+<html>
+<script type="text/javascript" src="crypto-js.js"></script>
+<script>
+    
+    var burl = 'https://api.binance.com';
+    var endPoint = '/api/v3/account';
+    var dataQueryString = 'recvWindow=20000&timestamp=' + Date.now();
+    
+    var keys = {
+        'akey' : '',
+        'skey' : ''
+    }
+    
+    var signature = CryptoJS.HmacSHA256(dataQueryString ,keys['skey']).toString(CryptoJS.enc.Hex);
+    
+    var ourRequest = new XMLHttpRequest();
+    
+    var url = burl + endPoint + '?' + dataQueryString + '&signature=' + signature;
+    
+    ourRequest.open('GET', url, true);
+    ourRequest.setRequestHeader('X-MBX-APIKEY',keys['akey']);
+    
+    ourRequest.onload = function(){
+        ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+    }
+    ourRequest.send();
+    
+    
+</script>
+</html>
